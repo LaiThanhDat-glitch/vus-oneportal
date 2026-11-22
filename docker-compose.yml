@@ -2,11 +2,11 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: vus
-      POSTGRES_PASSWORD: vus_local_only
-      POSTGRES_DB: vus_oneportal
+      POSTGRES_USER: ${POSTGRES_USER:-vus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vus_local_only}
+      POSTGRES_DB: ${POSTGRES_DB:-vus_oneportal}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -18,7 +18,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -35,6 +35,8 @@ services:
         required: true
       - path: ./backend/.env
         required: false
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vus}:${POSTGRES_PASSWORD:-vus_local_only}@db:5432/${POSTGRES_DB:-vus_oneportal}
     command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
       - ./backend:/app

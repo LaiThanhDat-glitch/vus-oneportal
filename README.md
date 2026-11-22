@@ -96,7 +96,7 @@ Tại thư mục gốc dự án:
 docker compose up -d db redis
 ```
 
-PostgreSQL được mở tại `localhost:5432`, Redis tại `localhost:6379`. Cấu hình demo của PostgreSQL là database `vus_oneportal`, user `vus`, mật khẩu `vus_local_only`.
+PostgreSQL và Redis chỉ lắng nghe trên `127.0.0.1` tại cổng `5432` và `6379`. Cấu hình local mặc định của PostgreSQL là database `vus_oneportal`, user `vus`, mật khẩu `vus_local_only` (chỉ dùng phát triển local; không dùng cho production). Để thay đổi, tạo `.env` tại thư mục gốc; ví dụ `POSTGRES_PASSWORD=your_local_password`. Compose truyền cùng cấu hình đó cho backend.
 
 ### Bước 2: Cài package Python và chạy backend
 
@@ -212,7 +212,7 @@ vus-oneportal/
 
 ### Cổng đã được sử dụng
 
-Docker Compose cần các cổng `3000`, `8000`, `5432` và `6379`. Nếu cổng đang được ứng dụng khác sử dụng, dừng ứng dụng đó hoặc đổi vế trái trong `ports` của `docker-compose.yml` rồi truy cập cổng mới. Ví dụ `"3001:3000"` sẽ mở frontend tại `http://localhost:3001`.
+Docker Compose cần các cổng `3000`, `8000`, `5432` và `6379`. PostgreSQL và Redis chỉ bind vào `127.0.0.1`; frontend và backend dùng cấu hình phát triển của Compose. Nếu cổng đang được ứng dụng khác sử dụng, dừng ứng dụng đó hoặc đổi cổng host trong `ports` của `docker-compose.yml`. Ví dụ `"3001:3000"` sẽ mở frontend tại `http://localhost:3001`.
 
 ### Frontend không gọi được API
 
