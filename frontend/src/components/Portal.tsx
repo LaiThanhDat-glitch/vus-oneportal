@@ -134,7 +134,7 @@ export function Portal({ locale }: { locale: string }) {
     setLoading(true);
     try {
       if (currentUser.role === "student") {
-        const [dashboard, schedule, invoices, feedback] = await Promise.all([
+        const [dashboard, schedule, invoices, feedback, tickets] = await Promise.all([
           api<{ student_name?: string; class_name?: string; next_session?: Session | null; sessions: Session[]; attendance: { id: string; session_id: string; checked_in_at: string }[] }>("/student/dashboard"),
           api<{ sessions: Session[] }>("/student/schedule"),
           api<{ invoices: Invoice[] }>("/student/invoices"),
