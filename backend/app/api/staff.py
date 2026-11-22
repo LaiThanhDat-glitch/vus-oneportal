@@ -34,10 +34,11 @@ async def tickets(
     _user: User = Depends(allow_roles("staff")),
     db: AsyncSession = Depends(database_session),
 ) -> dict:
-    query = select(HelpdeskTicket).order_by(HelpdeskTicket.created_at.desc())
+    query = select(HelpdeskTicket, User).join(User, HelpdeskTicket.requester_id == User.id)
+    query = query.order_by(HelpdeskTicket.created_at.desc())
     if status in {"new", "in_progress", "resolved"}:
         query = query.where(HelpdeskTicket.status == status)
-    rows = (await db.execute(query.join(User, HelpdeskTicket.requester_id == User.id))).all()
+    rows = (await db.execute(query)).all()
     return {"tickets": [ticket_view(item, requester.full_name) for item, requester in rows]}
 
 
