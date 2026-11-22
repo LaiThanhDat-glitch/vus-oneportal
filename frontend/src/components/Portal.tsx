@@ -184,6 +184,8 @@ export function Portal({ locale }: { locale: string }) {
     if (user) void refreshData(user);
   }, [user, refreshData]);
 
+  const role = user?.role ?? "student";
+
   useEffect(() => {
     if (role !== "teacher" || !selectedSessionId) return;
     let mounted = true;
@@ -203,7 +205,6 @@ export function Portal({ locale }: { locale: string }) {
     return () => window.clearTimeout(timeout);
   }, [flash]);
 
-  const role = user?.role ?? "student";
   const navItems = useMemo(() => {
     if (role === "teacher") return [
       { id: "overview", label: t("overview"), icon: CalendarDays },

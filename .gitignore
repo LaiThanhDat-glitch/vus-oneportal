@@ -25,6 +25,7 @@ coverage/
 npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
+next-env.d.ts
 
 # Local secrets and environment files. Keep checked-in examples.
 .env
